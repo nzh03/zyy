@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zyy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: '微软雅黑', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffd6e7 0%, #ff9eb5 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 爱心雨效果 */
+        .heart {
+            position: fixed;
+            top: -10%;
+            transform: translateY(-10%);
+            color: #ff3f6c;
+            animation: fall 8s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        /* 登录页面样式 */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 62, 108, 0.2);
+            width: 100%;
+            max-width: 400px;
+            transform: translateY(0);
+            transition: transform 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, #ff9eb5, transparent);
+            animation: rotate 6s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .login-box h2 {
+            color: #ff3f6c;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #ffe4ec;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ff3f6c;
+            box-shadow: 0 0 10px rgba(255, 63, 108, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #ff3f6c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 63, 108, 0.4);
+        }
+
+        /* 作文页面样式 */
+        .essay-container {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+            position: relative;
+            z-index: 1;
+        }
+
+        .essay-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(255, 62, 108, 0.2);
+            line-height: 1.8;
+            font-size: 16px;
+            color: #5a2a3d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .essay-title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #ff3f6c;
+            position: relative;
+        }
+
+        .essay-title::after {
+            content: '❤';
+            display: block;
+            font-size: 24px;
+            animation: beat 1.2s infinite;
+        }
+
+        @keyframes beat {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .essay-content p {
+            text-indent: 2em;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 10px;
+        }
+
+        .essay-content p::before {
+            content: '❤';
+            color: #ff9eb5;
+            position: absolute;
+            left: -10px;
+            top: 5px;
+            font-size: 14px;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .essay-card {
+                padding: 25px;
+            }
+
+            .essay-title {
+                font-size: 24px;
+            }
+
+            .essay-content p {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 爱心雨 -->
+    <div id="hearts"></div>
+
+    <!-- 登录页面 -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <div class="login-inner">
+                <h2>TO 小云妹妹</h2>
+                <form id="loginForm">
+                    <button type="submit">点击开启</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 作文页面 -->
+    <div class="essay-container" id="essayContainer">
+        <div class="essay-card">
+            <h1 class="essay-title">致你的一封长信</h1>
+            <div class="essay-content">
+                <p>亲爱的小云妹妹：</p>
+                <p>见字如面。</p>
+                <p>其实这些话我已经在心里想了好久，每次看着对话框里你发的消息的时候就想讲，但是一直没勇气讲出来，自己最近也在天天想这个事情，今天终于开始落笔，虽然不知道最后有没有勇气发出去。</p>
+                <p>从你入学我就是你的小班导，不过那时你和班里的其它同学一样，没什么特别，我们也没有过多的交流。期间也只是通过别人听到过你几次，给过你书，我印象中基本就这些事情。</p>
+                <p>从今年四月份开始第一次一起打麻将，你坐在我旁边，我们的关系从学长学妹，慢慢变成了朋友，已经记不太清那时候的场景了。然后到后面五六月份，我们经常一起出去玩，陪你晚上不睡觉在学校里面闲逛、喝酒等，甚至通宵，我还挺享受这种感觉，享受和你在一起的时光，觉得你蛮可爱的，羡慕你男朋友，自己也想要谈一个这样的女朋友。后面我们俩还牵过几次手，不知道你当时有没有感觉到我心跳好快。我们还绑定了网易云的一起听，以及后面的抖音、王者、蛋仔等，我知道这些对你来说很正常，你也有好多个，但是这些我之前都没有，你都是第一个，所以就有一种说不出来的感觉。</p>
+                <p>等到六月底你放假回家了，我以为我们之间的联系可能会变少，但是还好并没有，我们之前的聊天越来越多，我感觉我和你一天发的消息比跟其它所有人加起来一周发的还要多。你会跟我分享好多事情，我也会。到后面也会每天说早安晚安，有时候每天醒来能看到手机上弹出好多未读消息，之前只在抖音上见到过这样的，没想到真有一次能让我在现实中遇到，真的好开心，感觉好久没有人对我这样了（或者说是第一次有人对我这样）。有时也会分享日常，让我感觉比较暧昧吧（我认为的暧昧可能和你认为的不一样，我感觉不只是说那些暧昧的话才是暧昧，每天分享日常、晚上打电话睡觉等等这些行为本身也很暧昧）。然后慢慢的，对你的感情也发生了改变，从朋友之间的友情，到想和你发展为爱情。</p>
+                <p>其实最近我也有暗示你吧，不知道你有没有看出来，说实话我在表白这件事情上还是比较怂的，不敢直接说出来。比如有一次你跟我分享了一个视频，然后我们说到你想遇到的那种男生概率只有十万分之一，然后我说我就是那十万分之一。还有一次，就是前两天，你说让我鼓起勇气才能谈到恋爱，我不知道你是不是在暗示我（应该不是吧），当时看到这句话，我已读了好久都没有回，我在想要怎么去回，但最终还是没勇气说出来，就只回了一个表情。我这次听你的话了，鼓起勇气了，但就是不知道结果会怎么样。</p>
+                <p>你发的抖音我都认真看了，我能大概从中了解到你想谈的是什么样的恋爱，我感觉你想要的很简单，想要一个听话的男朋友，每天可以分享日常，想腻歪可以腻歪，遇到问题可以及时解决等等这些，我感觉这些我都可以做到。你还说过你喜欢跟比你聪明的人谈恋爱，这样能学到很多东西，我感觉在一些方面（比如像编程或者其他的电脑技能等等）我还是满足这个要求的。</p>
+                <p>还有件事想跟你道歉，就是你说你要跟网上的人去暧昧我不让你去，其实是自己有一些私心的，有些吃醋，当时很想说一句，跟我暧昧！但是没有勇气开口。（PS. 这些内容是今晚之前写的，所以今晚我还是说了哦，我也很享受和你暧昧的过程）</p>
+                <p>我知道你最近受了许多委屈，有时候真心穿过屏幕去安慰你，抱抱你。一些事情可能让你对恋爱失去了信心，或者产生了不太好的想法，但我知道这些都不是你真实的想法，是赌气才这样做的，我一直认为你是一个非常好的女孩子，我愿意陪着你一起度过这段时光，把这些不开心的事情统统都忘掉，用我的陪伴来弥补你过去的伤痛，陪伴是最长情的告白，我相信我可以让你重新拾回信心，不知道你愿不愿意给我一次机会。</p>
+                <p>我不是因为想谈恋爱而要跟你谈恋爱，也不是突然一时兴起，是因为真的感觉你是一个特别好的女孩子，关心、体贴、善良、可爱、热爱生活，我知道喜欢你的人有很多，我可能配不上你，但我还是想大胆尝试尝试，给自己争取一下。我不敢说自己有多好，但我可以保证，你分享的每句话我多会认真回，你难过时我永远在，你想腻歪我可以放下手头的事情陪你，遇到问题的时我会先安慰你而不是讲道理，让你对恋爱重拾信心。</p>
+                <p>这是我第一次给一个女生写这么长的内容去表白，这些话困在了我心里好久，希望说这些不会给你带来困扰，虽然你应该大概率不会同意（我还是有自知之明的），你看过之后忘了这件事就好，我感觉说出来比一直闷在心里要好受一点，但我真的不想给你带来负担，希望你能原谅我的自私，你遵循你自己的想法就好，千万不要感到为难什么的，不然的话我会认为是我的问题，会很不开心的。我知道你现在还有所顾忌，但是看到你一次又一次被伤害让我感到心疼。如果你愿意给我这个机会，或者说想要考虑考虑，亦或是让我等你一段时间，只要是我还有机会，看完之后可以告诉我；如果你觉得不合适，我也不会强迫你，尊重你的选择，你就当没看到过这个网页，我们就当这件事情从来没发生过，希望我们像之前那样继续做朋友，因为和你做朋友已经让我很开心了，我还是愿意听你的分享任何东西，在你需要的时候出现。</p>
+                <p>对了，你之前说过希望表白的时候有束花，这次是没办法实现了，如果你愿意的话，我可以随时买给你。</p>
+                <p>最后，非常高兴你能看完，感谢你出现在我的生命里，无论你做什么决定，我都支持你。而我，会一直在。</p>
+                <br>
+                <p style="text-align: right;">2025.8.3 凌晨</p>
+                <p style="text-align: right;">nzh</p>
+                <br>
+                <hr>
+                <br>
+                <div style="font-size: small;">
+                    <ul>
+                        <li>PS.</li>
+                        <li>这个就是我昨晚在做的的东西，部署这个网页废了好大劲，我也没法给你说我在弄这个呀！对不起嘛，我下次不会了。</li>
+                        <li>我明天中午12点会把这个网页给删掉，如果你拒绝但是想留个纪念可以自己截图，我们就当什么都没发生过；如果同意的话我后面可以发你这个内容。</li>
+                        <li>我明天12点之后再看手机给你发消息，你要是那时候才醒没看到的话就说明我们没缘分吧。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 生成爱心雨
+        function createHearts() {
+            const icons = ['❤', '🌸', '✨', '🎀', '💎', '🍬'];
+            const container = document.getElementById('hearts');
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                // 随机选择一个图标
+                heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // 登录逻辑
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            // 隐藏登录页面，显示作文页面
+            document.getElementById('loginContainer').style.display = 'none';
+            const essay = document.getElementById('essayContainer');
+            essay.style.display = 'block';
+            // 触发淡入动画
+            setTimeout(() => {
+                essay.style.opacity = 1;
+            }, 10);
+        });
+
+        // 点击页面生成爱心或其他图标
+        document.addEventListener('click', function (e) {
+            const icons = ['❤', '🌸', '✨', '🎀', '💎', '🍬'];
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            heart.style.animation = 'fall 3s linear';
+            heart.style.fontSize = Math.random() * 30 + 20 + 'px';
+            heart.style.color = ['#ff3f6c', '#ff9eb5', '#ffd6e7'][Math.floor(Math.random() * 3)];
+            document.getElementById('hearts').appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        });
+    </script>
+</body>
+
+</html>
